@@ -1,13 +1,13 @@
 'use strict'
 import Router from 'koa-router'
 
-const router = new Router({ prefix: '/users' })
-const {
-  UserController,
-  ReportController,
-} = proton.app.controllers
-//
-// router.get('/', AuthPolicies.bearer, UserController.find)
+const router = new Router({ prefix: '/duplicates' })
+const { DuplicateController } = proton.app.controllers
+
+router.post('/', DuplicateController.create)
+
+router.get('/', DuplicateController.find)
+router.get('/count', DuplicateController.count)
 // router.post('/', AuthPolicies.bearerWithoutUser, UserController.create)
 //
 // router.put('/me', AuthPolicies.bearer, UserController.updateMe)

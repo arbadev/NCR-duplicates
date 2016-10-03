@@ -1,6 +1,6 @@
 'use strict'
 
-let winston = require('winston')
+const winston = require('winston')
 
 module.exports = new winston.Logger({
   level: 'silly',

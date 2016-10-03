@@ -2,14 +2,7 @@
   "extends": "airbnb-base",
   "globals": {
     "proton": true,
-    "passport": true,
-    "Sparkd": true,
-    "Language": true,
-    "User": true,
-    "Token": true,
-    "Like": true,
-    "Report": true,
-    "Feedback": true,
+    "Duplicate": true,
     "describe": true,
     "it": true
   },

@@ -8,5 +8,6 @@ router.post('/', DuplicateController.create)
 
 router.get('/', DuplicateController.find)
 router.get('/count', DuplicateController.count)
+router.get('/top5', DuplicateController.getTop5)
 
 module.exports = router

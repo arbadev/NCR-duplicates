@@ -5,8 +5,12 @@ import Controller from 'proton-controller'
 export default class DuplicateController extends Controller {
 
   /**
-  *
-  *
+  * @method create
+  * @description create a document with numberA and numberB but if this alredy
+  * exist just update its quantity
+  * @param numberA = Number
+  * @param numberB = Number
+  * @author Andres Barradas
   */
   * create() {
     try {
@@ -22,8 +26,9 @@ export default class DuplicateController extends Controller {
   }
 
   /**
-  * @method getTop5
-  * @description get top 5 most frequent records of duplicates group
+  * @method find
+  * @description find all Duplicates that found by query params
+  * @param areDuplicates = boolean
   * @author Andres Barradas
   */
   * find() {
@@ -41,8 +46,9 @@ export default class DuplicateController extends Controller {
   }
 
   /**
-  * @method getTop5
-  * @description get top 5 most frequent records of duplicates group
+  * @method count
+  * @description count all Duplicates that found by query params
+  * @param areDuplicates = boolean
   * @author Andres Barradas
   */
   * count() {
@@ -64,11 +70,11 @@ export default class DuplicateController extends Controller {
   * @description get top 5 most frequent records of duplicates group
   * @author Andres Barradas
   */
-  static * getTop5() {
-    proton.log.debug('DuplicateController.count')
+  * getTop5() {
+    proton.log.debug('DuplicateController.getTop5')
     try {
-      const items = yield Duplicate.find({}).sort({ quantity: 'descending' })
-      this.response.body = items
+      const top5 = yield Duplicate.find({}).sort({ quantity: 'descending' }).limit(5)
+      this.response.body = top5
       this.response.status = 201
     } catch (err) {
       proton.log.error('DuplicateController.count', err)

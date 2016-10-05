@@ -1,7 +1,6 @@
 'use strict'
 
 import Model from 'proton-mongoose-model'
-import moment from 'moment'
 
 export default class Duplicate extends Model {
 
@@ -11,15 +10,28 @@ export default class Duplicate extends Model {
       numberB: String,
       areDuplicates: Boolean,
       validInput: Boolean,
+      quantity: {
+        type: Number,
+        default: 0
+      },
     }
   }
 
   /**
-  * @method getTop5
-  * @description get top 5 records of the most frequent duplicate group
-  * @author Andres Barradas
+  *
+  *
   */
-  static * getTop5() {
-    
+  static create(numberA, numberB) {
+    const { CompareService } = proton.app.services
+    const areDuplicates = CompareService.areDuplicates(numberA, numberB)
+    const validInput = true
+    const criteria = { numberA, numberB }
+    const opts = { new: true, upsert: true }
+    const update = {
+      $setOnInsert: { numberA, numberB, areDuplicates, validInput },
+      $inc: { quantity: 1 }
+    }
+    return this.findOneAndUpdate(criteria, update, opts)
   }
+
 }

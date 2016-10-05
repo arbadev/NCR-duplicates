@@ -12,23 +12,19 @@ export default class DuplicateController extends Controller {
     try {
       proton.log.debug('DuplicateController.create')
       proton.log.debug('body', this.request.body)
-
-      const { numberA } = this.request.body
-      const { numberB } = this.request.body
-      const { CompareService } = proton.app.services
-      const areDuplicates = CompareService.areDuplicates(numberA, numberB)
-      const validInput = true
-      yield Duplicate.create({ numberA, numberB, areDuplicates, validInput })
+      const { numberA, numberB } = this.request.body
+      this.response.body = yield Duplicate.create(numberA, numberB)
       this.response.status = 201
     } catch (err) {
       proton.log.error('DuplicateController.create', err)
-      this.status = 400
+      this.response.status = 400
     }
   }
 
   /**
-  *
-  *
+  * @method getTop5
+  * @description get top 5 most frequent records of duplicates group
+  * @author Andres Barradas
   */
   * find() {
     proton.log.debug('DuplicateController.find')
@@ -37,6 +33,7 @@ export default class DuplicateController extends Controller {
     try {
       const duplicates = yield Duplicate.find(params)
       this.response.body = duplicates
+      this.response.status = 201
     } catch (err) {
       proton.log.error('DuplicateController.find', err)
       this.response.status = 400
@@ -44,8 +41,9 @@ export default class DuplicateController extends Controller {
   }
 
   /**
-  *
-  *
+  * @method getTop5
+  * @description get top 5 most frequent records of duplicates group
+  * @author Andres Barradas
   */
   * count() {
     proton.log.debug('DuplicateController.count')
@@ -54,6 +52,24 @@ export default class DuplicateController extends Controller {
     try {
       const number = yield Duplicate.count(params)
       this.response.body = number
+      this.response.status = 201
+    } catch (err) {
+      proton.log.error('DuplicateController.count', err)
+      this.response.status = 400
+    }
+  }
+
+  /**
+  * @method getTop5
+  * @description get top 5 most frequent records of duplicates group
+  * @author Andres Barradas
+  */
+  static * getTop5() {
+    proton.log.debug('DuplicateController.count')
+    try {
+      const items = yield Duplicate.find({}).sort({ quantity: 'descending' })
+      this.response.body = items
+      this.response.status = 201
     } catch (err) {
       proton.log.error('DuplicateController.count', err)
       this.response.status = 400

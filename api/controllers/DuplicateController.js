@@ -6,18 +6,17 @@ export default class DuplicateController extends Controller {
 
   /**
   * @method create
-  * @description create a document with numberA and numberB but if this alredy
+  * @description create a document with duplicate but if this alredy
   * exist just update its quantity
-  * @param numberA = Number
-  * @param numberB = Number
+  * @param duplicate = String
   * @author Andres Barradas
   */
   * create() {
     try {
       proton.log.debug('DuplicateController.create')
       proton.log.debug('body', this.request.body)
-      const { numberA, numberB } = this.request.body
-      this.response.body = yield Duplicate.create(numberA, numberB)
+      const { duplicate } = this.request.body
+      this.response.body = yield Duplicate.create(duplicate)
       this.response.status = 201
     } catch (err) {
       proton.log.error('DuplicateController.create', err)
@@ -54,10 +53,8 @@ export default class DuplicateController extends Controller {
   * count() {
     proton.log.debug('DuplicateController.count')
     const params = this.query
-    proton.log.debug('params', params)
     try {
-      const number = yield Duplicate.count(params)
-      this.response.body = number
+      this.response.body = yield Duplicate.count(params)
       this.response.status = 201
     } catch (err) {
       proton.log.error('DuplicateController.count', err)

@@ -23,13 +23,13 @@ export default class Duplicate extends Model {
   * @author Andres Barradas
   */
   static create(duplicate) {
-    const validInput = /^[0-9,.]*$/.test(duplicate)
     const { UtilityService } = proton.app.services
-    const record = validInput ? UtilityService.sort(duplicate) : duplicate
-    const criteria = { record }
+    const record = UtilityService.sort(duplicate)
+    const { duplicated } = record
+    const criteria = { duplicated }
     const opts = { new: true, upsert: true }
     const update = {
-      $setOnInsert: { record, validInput },
+      $setOnInsert: record,
       $inc: { quantity: 1 }
     }
     return this.findOneAndUpdate(criteria, update, opts)

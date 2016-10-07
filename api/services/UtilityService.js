@@ -36,9 +36,16 @@ export default class UtilityService extends Service {
   * @author Andres Barradas
   */
   sort(duplicate) {
+    const validInput = /^[0-9,.]*$/.test(duplicate.replace(/ /g, ''))
+    proton.log.debug('validInput', validInput)
     const arrayDuplicate = _.split(duplicate, ',')
     const numberDuplicate = arrayDuplicate.map(Number)
-    const sortedDuplicates = _.sortBy(numberDuplicate)
-    return _.toString(sortedDuplicates)
+    const sortedDuplicate = _.sortBy(numberDuplicate)
+    const validDuplicate = _.toString(sortedDuplicate)
+    const object = {
+      duplicated: validInput ? validDuplicate : duplicate,
+      validInput
+    }
+    return object
   }
 }

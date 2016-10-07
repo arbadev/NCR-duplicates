@@ -37,7 +37,30 @@ export default class DuplicateController extends Controller {
     try {
       const duplicates = yield Duplicate.find(params)
       this.response.body = duplicates
-      this.response.status = 201
+      this.response.status = 200
+    } catch (err) {
+      proton.log.error('DuplicateController.find', err)
+      this.response.status = 400
+    }
+  }
+
+  /**
+  * @method findOne
+  * @description findOne duplic that match with the params param
+  * @param params = String
+  * @author Andres Barradas
+  */
+  * findOne() {
+    proton.log.debug('DuplicateController.findOne')
+    const { duplicateQuery } = this.query
+    proton.log.debug('duplicateQuery', duplicateQuery)
+    try {
+      const { UtilityService } = proton.app.services
+      const criteria = UtilityService.sort(duplicateQuery)
+      proton.log.debug('criteria', criteria)
+      const duplicate = yield Duplicate.findOne(criteria)
+      this.response.body = duplicate
+      this.response.status = 200
     } catch (err) {
       proton.log.error('DuplicateController.find', err)
       this.response.status = 400
@@ -55,7 +78,7 @@ export default class DuplicateController extends Controller {
     const params = this.query
     try {
       this.response.body = yield Duplicate.count(params)
-      this.response.status = 201
+      this.response.status = 200
     } catch (err) {
       proton.log.error('DuplicateController.count', err)
       this.response.status = 400
@@ -72,7 +95,7 @@ export default class DuplicateController extends Controller {
     try {
       const top5 = yield Duplicate.find({}).sort({ quantity: 'descending' }).limit(5)
       this.response.body = top5
-      this.response.status = 201
+      this.response.status = 200
     } catch (err) {
       proton.log.error('DuplicateController.count', err)
       this.response.status = 400

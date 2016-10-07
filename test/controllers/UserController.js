@@ -6,47 +6,10 @@ import { expect } from 'chai'
 
 const request = supertest(app)
 
-describe('UserController', () => {
+describe('Duplicate flows', () => {
   let [barbara, luis, mariangela, andres] = []
 
-  const users = [
-    {
-      firstName: 'Barbarita',
-      email: 'baba@gmail.com',
-      facebookId: 1,
-      avatar: 'http://res.cloudinary.com/nucleos/image/upload/v1468541626/1f84ab06f0513b197ffd282c0b615669.jpg',
-      message: 'message.mp3',
-      coordinates: [9.016277, -62.637863],
-      gender: 'female',
-    },
-    {
-      firstName: 'luis',
-      email: 'luis@nucleos.io',
-      facebookId: 2,
-      avatar: 'http://res.cloudinary.com/nucleos/image/upload/v1468541626/1f84ab06f0513b197ffd282c0b615669.jpg',
-      message: 'message.mp3',
-      coordinates: [7.833070, -62.744980],
-      gender: 'male',
-    },
-    {
-      firstName: 'Mariangela',
-      email: 'marian@nucleos.io',
-      facebookId: 3,
-      avatar: 'http://res.cloudinary.com/nucleos/image/upload/v1468541626/1f84ab06f0513b197ffd282c0b615669.jpg',
-      message: 'message.mp3',
-      coordinates: [8.326624, -62.618637],
-      gender: 'female',
-    },
-    {
-      firstName: 'andres',
-      email: 'andres@nucleos.io',
-      facebookId: 4,
-      avatar: 'http://res.cloudinary.com/nucleos/image/upload/v1468541626/1f84ab06f0513b197ffd282c0b615669.jpg',
-      message: 'message.mp3',
-      coordinates: [8.368363, -62.648163],
-      gender: 'male',
-    },
-  ]
+
 
   before(function*() {
     [barbara, luis, mariangela, andres] = yield User.create(users)
@@ -60,91 +23,12 @@ describe('UserController', () => {
     yield [User.remove({}), Token.remove({}), Like.remove({})]
   })
 
-  it('Luis likes Barbara', function*() {
-    yield request
-      .post(`/users/${barbara._id}/like`)
-      .set('Authorization', `Bearer ${luis.token.value}`)
-      .expect(201)
-  })
-
-  it('Barbara likes Andres', function*() {
-    yield request
-      .post(`/users/${andres._id}/like`)
-      .set('Authorization', `Bearer ${barbara.token.value}`)
-      .expect(201)
-  })
-
   it('Find', function*() {
     const { body } = yield request
       .get('/users')
       .set('Authorization', `Bearer ${barbara.token.value}`)
       .expect(200)
     proton.log.debug('users', body)
-  })
-
-  it('Barbara likes Luis', function*() {
-    yield request
-      .post(`/users/${luis._id}/like`)
-      .set('Authorization', `Bearer ${barbara.token.value}`)
-      .expect(201)
-  })
-
-  it('Andres likes Mariangela', function*() {
-    yield request
-      .post(`/users/${mariangela._id}/like`)
-      .set('Authorization', `Bearer ${andres.token.value}`)
-      .expect(201)
-  })
-
-  it('Mariangela likes Andres', function*() {
-    yield request
-      .post(`/users/${andres._id}/like`)
-      .set('Authorization', `Bearer ${mariangela.token.value}`)
-      .expect(201)
-  })
-
-  it('Barbara still likes luis', function*() {
-    yield request
-      .post(`/users/${luis._id}/like`)
-      .set('Authorization', `Bearer ${barbara.token.value}`)
-      .expect(201)
-  })
-
-  it('Barbara likes Luis', function*() {
-    yield request
-      .post(`/users/${luis._id}/like`)
-      .set('Authorization', `Bearer ${barbara.token.value}`)
-      .expect(201)
-  })
-
-  it('Luis not like Barbara', function*() {
-    yield request
-      .post(`/users/${barbara._id}/dislike`)
-      .set('Authorization', `Bearer ${luis.token.value}`)
-      .expect(201)
-  })
-
-  it('Update a user profile', function*() {
-    const { body } = yield request
-      .put('/users/me')
-      .set('Authorization', `Bearer ${luis.token.value}`)
-      .send({ firstName: 'Mechas', languages: ['en', 'es'] })
-      .expect(200)
-    expect(body).to.have.property('languages').and.to.have.lengthOf(2)
-  })
-
-  it('Mariangela still likes Andres', function*() {
-    yield request
-      .post(`/users/${andres._id}/like`)
-      .set('Authorization', `Bearer ${mariangela.token.value}`)
-      .expect(201)
-  })
-
-  it('Andres still likes Mariangela', function*() {
-    yield request
-      .post(`/users/${mariangela._id}/like`)
-      .set('Authorization', `Bearer ${andres.token.value}`)
-      .expect(201)
   })
 
   it('Find me', function*() {

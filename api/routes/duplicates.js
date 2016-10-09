@@ -10,6 +10,7 @@ router.get('/', DuplicateController.find)
 router.get('/count', DuplicateController.count)
 router.get('/top5', DuplicateController.getTop5)
 router.get('/findOne', DuplicateController.findOne)
+router.get('/getCounters', DuplicateController.getCounters)
 
 
 module.exports = router

@@ -76,8 +76,15 @@ export default class DuplicateController extends Controller {
   * count() {
     proton.log.debug('DuplicateController.count')
     const params = this.query
+    // const criteria =
+
+    proton.log.debug('params.duplicate', params.duplicate)
+    const finder = params.duplicate
+    proton.log.debug('finder', finder)
+    const criteria = finder === '1' ? { quantity: { $gt: 1 } } : { quantity: 1 }
+    proton.log.debug('criteria', criteria)
     try {
-      this.response.body = yield Duplicate.count(params)
+      this.response.body = yield Duplicate.count(criteria)
       this.response.status = 200
     } catch (err) {
       proton.log.error('DuplicateController.count', err)
@@ -101,4 +108,5 @@ export default class DuplicateController extends Controller {
       this.response.status = 400
     }
   }
+
 }

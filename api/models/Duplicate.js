@@ -10,7 +10,7 @@ export default class Duplicate extends Model {
       validInput: Boolean,
       quantity: {
         type: Number,
-        default: 0
+        default: 1
       },
     }
   }
